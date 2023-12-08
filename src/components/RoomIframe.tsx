@@ -1,5 +1,3 @@
-"use client";
-
 import { forwardRef, useEffect } from "react";
 import { mergeQuery } from "../util/urlUtils";
 
@@ -369,7 +367,7 @@ const RoomIframe = forwardRef(function RoomIframe(
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent<unknown>) => {
-      if (event.origin != wherebyBaseUrl) {
+      if (event.origin !== wherebyBaseUrl) {
         return;
       }
 
