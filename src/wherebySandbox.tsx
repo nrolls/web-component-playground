@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import RoomIframe, {
   type Callbacks,
   type Settings,
 } from "./components/RoomIframe";
+import useWherebyRoomIframeCommands from "./hooks/useWherebyRoomIframeCommands";
 
 // In order to preload this with a specific room URL, you can add roomUrl as a query param
 // Example: <route_to_page>roomUrl=my-room.whereby.com
@@ -18,6 +19,24 @@ function WherebySandbox() {
     setEventLog((prevLog) => [...prevLog, messageWithDetail]);
     console.log(message, detail);
   };
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const {
+    startRecording,
+    stopRecording,
+    startStreaming,
+    stopStreaming,
+    toggleCamera,
+    toggleMicrophone,
+    toggleScreenshare,
+    toggleChat,
+  } = useWherebyRoomIframeCommands(iframeRef);
+
+  const [camera, setCamera] = useState(false);
+  const [microphone, setMicrophone] = useState(false);
+  const [screenshare, setScreenshare] = useState(false);
+  const [chat, setChat] = useState(false);
 
   const [meetingJoined, setMeetingJoined] = useState(false);
   const [settings, setSettings] = useState<Partial<Settings>>({});
@@ -203,7 +222,70 @@ function WherebySandbox() {
   if (meetingJoined) {
     return (
       <div className="flex h-screen w-screen flex-row">
+        <div className="flex flex-col">
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => startRecording()}
+          >
+            startRecording
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => stopRecording()}
+          >
+            stopRecording
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => startStreaming()}
+          >
+            startStreaming
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => stopStreaming()}
+          >
+            stopStreaming
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              toggleCamera(camera);
+              setCamera(!camera);
+            }}
+          >
+            toggleCamera
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              toggleMicrophone(microphone);
+              setMicrophone(!microphone);
+            }}
+          >
+            toggleMicrophone
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              toggleScreenshare(screenshare);
+              setScreenshare(!screenshare);
+            }}
+          >
+            toggleScreenshare
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              toggleChat(chat);
+              setChat(!chat);
+            }}
+          >
+            toggleChat
+          </button>
+        </div>
         <RoomIframe
+          ref={iframeRef}
           className="h-full w-full"
           roomUrl={roomUrl}
           settings={settings}
@@ -227,9 +309,6 @@ function WherebySandbox() {
     return (
       <div className="flex flex-col gap-1 p-6">
         <h1 className="text-2xl">Room Settings</h1>
-        <h2 className="text-l text-slate-600">
-          Hover over options for more info
-        </h2>
         <hr />
         <div className="mb-8 mt-5 grid grid-cols-2 gap-3 xl:grid-cols-4 2xl:grid-cols-6">
           {checkboxOptionInputs}
