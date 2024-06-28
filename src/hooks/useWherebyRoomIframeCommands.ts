@@ -60,6 +60,24 @@ export default function useWherebyRoomIframeCommands(
     },
     [iframeRef],
   );
+  const toggleBreakout = useCallback(
+    (enabled: boolean) => {
+      postCommand(iframeRef, "toggle_breakout", [enabled]);
+    },
+    [iframeRef],
+  );
+  const leaveRoom = useCallback(
+    (enabled: boolean) => {
+      postCommand(iframeRef, "leave_room", [enabled]);
+    },
+    [iframeRef],
+  );
+  const togglePeople = useCallback(
+    (enabled: boolean) => {
+      postCommand(iframeRef, "toggle_people", [enabled]);
+    },
+    [iframeRef],
+  );
 
   return {
     startRecording,
@@ -70,5 +88,8 @@ export default function useWherebyRoomIframeCommands(
     toggleMicrophone,
     toggleScreenshare,
     toggleChat,
+    toggleBreakout,
+    togglePeople,
+    leaveRoom,
   };
 }

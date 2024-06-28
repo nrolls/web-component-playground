@@ -31,12 +31,17 @@ function WherebySandbox() {
     toggleMicrophone,
     toggleScreenshare,
     toggleChat,
+    toggleBreakout,
+    togglePeople,
+    leaveRoom,
   } = useWherebyRoomIframeCommands(iframeRef);
 
   const [camera, setCamera] = useState(false);
   const [microphone, setMicrophone] = useState(false);
   const [screenshare, setScreenshare] = useState(false);
   const [chat, setChat] = useState(false);
+  const [people, setPeople] = useState(false);
+  const [breakout, setBreakout] = useState(false);
 
   const [meetingJoined, setMeetingJoined] = useState(false);
   const [settings, setSettings] = useState<Partial<Settings>>({});
@@ -282,6 +287,30 @@ function WherebySandbox() {
             }}
           >
             toggleChat
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              togglePeople(people);
+              setPeople(!people);
+            }}
+          >
+            togglePeople
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {
+              toggleBreakout(breakout);
+              setBreakout(!breakout);
+            }}
+          >
+            toggleBreakout
+          </button>
+          <button
+            className="m-3 rounded border border-slate-700 bg-cyan-100 px-3 py-2"
+            onClick={() => {leaveRoom(true)}}
+          >
+            leaveRoom
           </button>
         </div>
         <RoomIframe
