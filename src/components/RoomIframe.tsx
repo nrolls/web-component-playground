@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { forwardRef, useEffect } from "react";
 import { mergeQuery } from "../util/urlUtils";
 
 /** For a full description of these settings,
@@ -347,7 +347,10 @@ type Props = {
   className?: string;
 };
 
-function RoomIframe({ roomUrl, settings, callbacks, className }: Props) {
+const RoomIframe = forwardRef(function RoomIframe(
+  { roomUrl, settings, callbacks, className }: Props,
+  ref: React.Ref<HTMLIFrameElement> | null
+) {
   const queryParams = settings ? settingsToQueryParams(settings) : {};
   const url = mergeQuery(roomUrl, queryParams);
   const urlMatch =
@@ -355,12 +358,10 @@ function RoomIframe({ roomUrl, settings, callbacks, className }: Props) {
       url
     );
 
-  // This error handling could be done better!
   if (!urlMatch) {
     throw new Error("Invalid Whereby room URL");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, subdomain, domain] = urlMatch;
   const wherebyBaseUrl = `https://${subdomain}${domain}`;
 
@@ -440,12 +441,14 @@ function RoomIframe({ roomUrl, settings, callbacks, className }: Props) {
 
   return (
     <iframe
+      ref={ref}
+      title="Whereby iframe embed"
       className={className}
       src={url}
       allow="camera; microphone; fullscreen; speaker; display-capture; compute-pressure"
     ></iframe>
   );
-}
+});
 
 export default RoomIframe;
 export type { Settings, Callbacks };
